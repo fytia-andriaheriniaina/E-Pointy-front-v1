@@ -33,7 +33,7 @@ export default function StudentsPage({ students, setStudents, filieres }) {
               <th className="p-3 border-b">Prénom</th>
               <th className="p-3 border-b">Matricule</th>
               <th className="p-3 border-b">Email</th> 
-              <th className="p-3 border-b">Filière</th>
+              <th className="p-3 border-b">Niveau</th>
               <th className="p-3 border-b text-center">Contact</th>
               <th className="p-3 border-b text-center">Profil</th>
             </tr>
@@ -45,7 +45,7 @@ export default function StudentsPage({ students, setStudents, filieres }) {
                 <td className="p-3 text-center">{s.prenom}</td>
                 <td className="p-3 text-center">{s.matricule}</td>
                 <td className="p-3 text-center">{s.email}</td>
-                <td className="p-3 text-center">{s.filieres}</td>
+                <td className="p-3 text-center">{s.niveau}</td>
                 <td className="p-3 text-center">{s.telephone}</td>
                 <td className="p-3 text-center ">
                   <button

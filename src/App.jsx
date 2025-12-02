@@ -28,12 +28,12 @@ export default function App() {
     );
   }
 
-  // Sinon, on montre l'app complète avec la Sidebar
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar isOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <div className={`flex-1 p-8 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <div className={`flex-1 p-8 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}, bg-gradient-to-br from-slate-900/80 via-blue-900/80 to-slate-900/80`}>
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
@@ -55,7 +55,10 @@ export default function App() {
           />
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+          
         </Routes>
+        
       </div>
     </div>
   );

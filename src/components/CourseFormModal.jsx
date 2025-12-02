@@ -1,76 +1,77 @@
-import { X } from "lucide-react";
 import { useState } from "react";
+import ReusableGlassModal from "./ReusableGlassModal";
 
-export default function CourseFormModal({ onClose, onSave }) {
-  const [form, setForm] = useState({
-    nom: "",
-    code: "",
-    enseignant: "",
-    semestre: "",
+export default function CourseFormModal({ onClose, onSubmit }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    teacher: "",
+    schedule: "",
+    credits: "",
+    description: "",
   });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const update = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    if (!form.nom || !form.code || !form.enseignant || !form.semestre) return;
-    onSave && onSave(form);
+  const submit = () => {
+    onSubmit(formData);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-      <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 relative">
-        
-        {/* Bouton fermer */}
+    <ReusableGlassModal title="Créer un nouveau cours" onClose={onClose}>
+      <div className="space-y-4">
+
+        {/* Course Name */}
+        <input
+          name="name"
+          onChange={update}
+          placeholder="Nom du cours"
+          className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-white/60 outline-none"
+        />
+
+        {/* Teacher */}
+        <input
+          name="teacher"
+          onChange={update}
+          placeholder="Enseignant"
+          className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-white/60 outline-none"
+        />
+
+        {/* Schedule */}
+        <input
+          name="schedule"
+          onChange={update}
+          placeholder="Horaire (ex: Lundi 8h-10h)"
+          className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-white/60 outline-none"
+        />
+
+        {/* Credits */}
+        <input
+          name="credits"
+          type="number"
+          onChange={update}
+          placeholder="Crédits"
+          className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-white/60 outline-none"
+        />
+
+        {/* Description */}
+        <textarea
+          name="description"
+          onChange={update}
+          placeholder="Description"
+          className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-white/60 outline-none min-h-[80px]"
+        ></textarea>
+
+        {/* Button */}
         <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+          onClick={submit}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition"
         >
-          <X className="w-5 h-5" />
-        </button>
-
-        <h2 className="text-xl font-bold mb-4">Créer un cours</h2>
-
-        <div className="space-y-3">
-          <input
-            type="text"
-            name="nom"
-            placeholder="Nom du cours"
-            className="w-full border p-2 rounded"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="code"
-            placeholder="Code du cours"
-            className="w-full border p-2 rounded"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="enseignant"
-            placeholder="Enseignant"
-            className="w-full border p-2 rounded"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="semestre"
-            placeholder="Semestre"
-            className="w-full border p-2 rounded"
-            onChange={handleChange}
-          />
-        </div>
-
-        <button
-          onClick={handleSubmit}
-          className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
-        >
-          Enregistrer
+          Enregistrer le cours
         </button>
       </div>
-    </div>
+    </ReusableGlassModal>
   );
 }

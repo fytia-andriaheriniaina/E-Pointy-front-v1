@@ -1,11 +1,12 @@
-import { useContext } from 'react';
-import { QrCode, BarChart3, Users, BookOpen, ClipboardList, LogOut } from 'lucide-react';
+import { useContext, useState } from 'react';
+import { QrCode, BarChart3, Users, BookOpen, ClipboardList, LogOut, Menu, X } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 export default function Sidebar() {
   const { setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -45,77 +46,116 @@ export default function Sidebar() {
     return colors[color] || colors.blue;
   };
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <aside className="w-64 flex-shrink-0 box-border min-h-screen bg-gradient-to-br from-slate-900/95 via-blue-900/95 to-slate-900/95 backdrop-blur-xl border-r-2 border-white/10 relative overflow-hidden">
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>
-      
-      {/* Content */}
-      <div className="relative z-10 p-4 flex flex-col h-full">
-        
-        {/* Logo/Header */}
-        <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border-2 border-white/20 rounded-2xl p-4 mb-8 shadow-xl">
-          <div className="flex items-center gap-3">
-            <div className="bg-blue-500/30 p-2.5 rounded-xl border border-blue-400/30">
-              <QrCode className="w-7 h-7 text-blue-400" />
+    <>
+      {/* ✅ Bouton menu À DROITE */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="lg:hidden fixed top-3 right-3 sm:top-4 sm:right-4 z-50 p-2 sm:p-3
+          bg-gradient-to-br from-slate-900/80 via-blue-900/80 text-white
+          rounded-lg sm:rounded-xl shadow-lg border-2 border-white/20 backdrop-blur-md
+          hover:scale-110 active:scale-95 transition-all"
+      >
+        {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+      </button>
+
+      {/* Overlay mobile */}
+      {isMobileMenuOpen && (
+        <div
+          onClick={closeMobileMenu}
+          className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-fadeIn"
+        />
+      )}
+
+      {/* ✅ SIDEBAR À DROITE */}
+      <aside
+        className={`
+          fixed lg:sticky top-0 right-0 h-screen
+          w-64 sm:w-72 lg:w-64
+          bg-gradient-to-br from-slate-900/95 via-blue-900/95 to-slate-900/95 
+          backdrop-blur-xl border-l-2 border-white/10 
+          transition-transform duration-300 ease-in-out z-40
+          flex-shrink-0
+          ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+        `}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>
+
+        <div className="relative z-10 p-3 sm:p-4 pt-16 sm:pt-14 lg:pt-20 flex flex-col h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+
+          {/* Logo */}
+          <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl border-2 border-white/20 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 shadow-xl">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="bg-blue-500/30 p-2 rounded-lg border border-blue-400/30">
+                <QrCode className="w-6 h-6 text-blue-400" />
+              </div>
+              <h1 className="text-xl font-bold text-white">E-POINTY</h1>
             </div>
-            <h1 className="hidden lg:block text-2xl font-bold text-white">E-POINTY</h1>
           </div>
-        </div>
 
-        {/* Navigation */}
-        <nav className="space-y-2 flex-1">
-          {menuItems.map(item => {
-            const Icon = item.icon;
-            const colorClasses = getColorClasses(item.color);
-            return (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all border-2 backdrop-blur-sm min-h-[3.5rem] box-border ${
-                    isActive 
-                      ? `${colorClasses.active} shadow-lg font-semibold` 
-                      : `${colorClasses.inactive} border-white/10 hover:scale-105`
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    <div className={`${isActive ? 'bg-white/20' : 'bg-white/5'} p-2 rounded-lg border ${isActive ? 'border-white/30' : 'border-white/10'} flex items-center justify-center w-9 h-9`}>
-                      <Icon className={`w-5 h-5 ${isActive ? 'text-white' : colorClasses.icon}`} />
-                    </div>
+          {/* Navigation */}
+          <nav className="space-y-2 flex-1">
+            {menuItems.map(item => {
+              const Icon = item.icon;
+              const colorClasses = getColorClasses(item.color);
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg
+                     transition-all border-2 backdrop-blur-sm ${
+                      isActive 
+                        ? `${colorClasses.active} shadow-lg font-semibold` 
+                        : `${colorClasses.inactive} border-white/10 hover:scale-[1.02]`
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <div className={`${isActive ? 'bg-white/20' : 'bg-white/5'} p-2 rounded-lg border ${isActive ? 'border-white/30' : 'border-white/10'}`}>
+                        <Icon className={`w-5 h-5 ${isActive ? 'text-white' : colorClasses.icon}`} />
+                      </div>
 
-                    <span className="hidden lg:block truncate">{item.label}</span>
+                      <span className="truncate text-sm sm:text-base">{item.label}</span>
 
-                    {/* Indicateur à droite (ne change pas la largeur du sidebar car width fixe) */}
-                    {isActive && (
-                      <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse" />
-                    )}
-                  </>
-                )}
-              </NavLink>
-            );
-          })}
-        </nav>
+                      {isActive && (
+                        <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse" />
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              );
+            })}
+          </nav>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-4"></div>
+          <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-3 sm:my-4"></div>
 
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="w-full px-4 py-3.5 flex items-center justify-center gap-3 bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-300 hover:text-red-200 rounded-xl border-2 border-red-400/30 hover:border-red-400/50 transition-all backdrop-blur-sm hover:scale-105 active:scale-95 font-semibold shadow-lg"
-        >
-          <div className="bg-red-500/30 p-2 rounded-lg border border-red-400/30">
-            <LogOut className="w-5 h-5" />
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-center gap-2
+              bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30
+              text-red-300 hover:text-red-200 rounded-lg border-2 border-red-400/30
+              transition-all backdrop-blur-sm hover:scale-[1.02] active:scale-95 font-semibold shadow-lg text-sm"
+          >
+            <div className="bg-red-500/30 p-1.5 sm:p-2 rounded-lg border border-red-400/30">
+              <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <span>Déconnexion</span>
+          </button>
+
+          <div className="mt-3 sm:mt-4 text-center">
+            <p className="text-xs text-white/40">v1.0.0</p>
           </div>
-          <span className="hidden lg:block">Déconnexion</span>
-        </button>
 
-        {/* Footer info */}
-        <div className="mt-4 text-center">
-          <p className="text-xs text-white/40 hidden lg:block">v1.0.0</p>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

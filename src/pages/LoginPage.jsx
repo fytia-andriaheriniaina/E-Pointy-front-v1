@@ -131,7 +131,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="ml-2 p-1 hover:bg-white/10 rounded-lg transition-all flex-shrink-0"
+                  className=" hover:bg-white/10 rounded-lg transition-all flex-shrink-0"
                 >
                   {showPassword ? (
                     <EyeOff className="text-white/70 hover:text-white transition-colors" size={20} />
@@ -228,7 +228,7 @@ export default function LoginPage() {
       )}
 
       {/* Animations */}
-      <style jsx>{`
+      <style >{`
         @keyframes slideUp {
           from {
             opacity: 0;
